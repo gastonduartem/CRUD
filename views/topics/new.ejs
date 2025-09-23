@@ -1,0 +1,38 @@
+<!-- views/topics/new.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Meta y título -->
+  <meta charset="utf-8" />
+  <title><%= title %></title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
+    form { display: grid; gap: .8rem; max-width: 480px; }
+    input, textarea { padding: .5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .btn { padding: .45rem .8rem; border: 1px solid #aaa; background: #f6f6f6; cursor: pointer; }
+    .row { display: flex; gap: .6rem; }
+  </style>
+</head>
+<body>
+  <!-- Título -->
+  <h1>Nuevo Topic</h1>
+
+  <!-- Form que envía a POST /topics -->
+  <form method="post" action="/topics">
+    <label>
+      Título:
+      <input name="title" required />
+    </label>
+
+    <label>
+      Descripción:
+      <textarea name="description" rows="4"></textarea>
+    </label>
+
+    <div class="row">
+      <button class="btn" type="submit">Crear</button>
+      <a class="btn" href="/topics">Cancelar</a>
+    </div>
+  </form>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Meta y título -->
+  <meta charset="utf-8" />
+  <title><%= title %></title>
+
+  <!-- CSS básico de ejemplo (puedes mover a /public/css/styles.css) -->
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
+    header { display: flex; justify-content: space-between; align-items: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: .6rem; border-bottom: 1px solid #ddd; text-align: left; }
+    .actions { display: flex; gap: .5rem; }
+    .btn { padding: .35rem .6rem; border: 1px solid #ccc; background: #f6f6f6; cursor: pointer; }
+    .btn--danger { border-color: #d33; color: #d33; }
+  </style>
+</head>
+<body>
+  <!-- Cabecera con botón "Nuevo" -->
+  <header>
+    <h1>Topics</h1>
+    <a class="btn" href="/topics/new">+ Nuevo</a>
+  </header>
+
+  <!-- Tabla de topics -->
+  <table>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Descripción</th>
+        <th>Votos</th>
+        <th>Creado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% if (!topics || topics.length === 0) { %>
+      <!-- Sin datos -->
+      <tr><td colspan="5">No hay topics aún</td></tr>
+    <% } else { %>
+      <!-- Render de cada fila -->
+      <% topics.forEach(t => { %>
+        <tr>
+          <td><%= t.title %></td>
+          <td><%= t.description %></td>
+          <td><%= t.votes %></td>
+          <td><%= t.created_at %></td>
+          <td class="actions">
+            <!-- Votar arriba -->
+            <form method="post" action="/topics/<%= t.id %>/vote?dir=up">
+              <button class="btn" type="submit">👍</button>
+            </form>
+            <!-- Votar abajo -->
+            <form method="post" action="/topics/<%= t.id %>/vote?dir=down">
+              <button class="btn" type="submit">👎</button>
+            </form>
+            <!-- Eliminar -->
+            <form method="post" action="/topics/<%= t.id %>/delete" onsubmit="return confirm('Eliminar?')">
+              <button class="btn btn--danger" type="submit">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
+    </tbody>
+  </table>
+
+  <!-- Link volver (no esencial porque ya estamos en /topics) -->
+  <p><a href="/">← Volver al inicio</a></p>
+</body>
+</html>
