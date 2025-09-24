@@ -8,24 +8,40 @@
 </head>
 <body>
   <div class="container">
+    <!-- ==================== HEADER ==================== -->
     <header class="header">
       <div class="title">
         <span class="logo">🆕</span>
         <h1>Nuevo Topic</h1>
       </div>
+      <!-- Botón para volver al inicio -->
       <a class="btn btn--neutral" href="/">← Volver</a>
     </header>
 
+    <!-- ==================== FORMULARIO NUEVO TOPIC ==================== -->
     <div class="card">
+      <!-- Formulario: method POST, action /topics -->
       <form class="form" method="post" action="/topics">
+        <!-- Campo: Título (obligatorio) -->
         <div class="form-row">
           <label for="title">Título *</label>
           <input id="title" name="title" required placeholder="Ej. Patrones de diseño favoritos" />
         </div>
+
+        <!-- Campo: Descripción -->
         <div class="form-row">
           <label for="description">Descripción</label>
           <textarea id="description" name="description" rows="4" placeholder="Contexto, razones, enlaces…"></textarea>
         </div>
+
+        <!-- Campo: Link (URL) -->
+        <div class="form-row">
+          <label for="link">Enlace</label>
+          <input type="url" id="link" name="link" placeholder="https://ejemplo.com" value="">
+          <small>Debe ser una URL válida (https://...).</small>
+        </div>
+
+        <!-- Acciones: botones de enviar y cancelar -->
         <div class="form-actions">
           <button class="btn btn--primary" type="submit">Crear</button>
           <a class="btn btn--neutral" href="/">Cancelar</a>

@@ -22,9 +22,21 @@ db.exec(`
     title TEXT NOT NULL,
     description TEXT DEFAULT '',
     votes INTEGER NOT NULL DEFAULT 0,
-    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    link TEXT DEFAULT ''
   );
 `);
+
+// ver bien como fucniona
+// Migración suave: agregar columna link si falta (DB vieja)
+// Devuelve la información de todas las columnas de la tabla topics
+const cols = db.prepare(`PRAGMA table_info('topics')`).all();
+// .some(...) recorre el array cols y devuelve true si alguna columna tiene name === 'link'
+const hasLink = cols.some(c => c.name === 'link');
+// Si hasLink es false, se ejecuta un ALTER TABLE para agregar la columna link
+if (!hasLink) {
+  db.exec(`ALTER TABLE topics ADD COLUMN link TEXT DEFAULT ''`);
+}
 
 // Exportamos la conexión (para usar en models)
 export default db;

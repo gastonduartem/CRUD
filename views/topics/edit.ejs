@@ -8,24 +8,46 @@
 </head>
 <body>
   <div class="container">
+    <!-- ==================== HEADER ==================== -->
     <header class="header">
       <div class="title">
         <span class="logo">✏️</span>
         <h1>Editar Topic</h1>
       </div>
+      <!-- Botón para volver al inicio -->
       <a class="btn btn--neutral" href="/">← Volver</a>
     </header>
 
+    <!-- ==================== FORMULARIO EDITAR TOPIC ==================== -->
     <div class="card">
+      <!-- Formulario: method POST, action /topics/:id/update -->
       <form class="form" method="post" action="/topics/<%= topic.id %>/update">
+        <!-- Campo: Título -->
         <div class="form-row">
           <label for="title">Título *</label>
           <input id="title" name="title" required value="<%= topic.title %>" />
         </div>
+
+        <!-- Campo: Descripción -->
         <div class="form-row">
           <label for="description">Descripción</label>
           <textarea id="description" name="description" rows="4"><%= topic.description %></textarea>
         </div>
+
+        <!-- Campo: Link (URL) -->
+        <div class="form-row">
+          <label for="link">Enlace</label>
+          <input
+            type="url"
+            id="link"
+            name="link"
+            placeholder="https://ejemplo.com"
+            value="<%= topic?.link || '' %>"
+          >
+          <small>Opcional. Dejá vacío si no querés mostrar enlace.</small>
+        </div>
+
+        <!-- Acciones: guardar cambios o cancelar -->
         <div class="form-actions">
           <button class="btn btn--primary" type="submit">Guardar cambios</button>
           <a class="btn btn--neutral" href="/">Cancelar</a>

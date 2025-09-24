@@ -15,8 +15,9 @@ const app = express();
 app.set('view engine', 'ejs');                          // Motor de plantillas
 app.set('views', path.join(__dirname, 'views'));        // Carpeta de vistas (en la raíz del proyecto)
 
+// Un middleware es cualquier función que se ejecuta entre que entra la petición y sale la respuesta, y sirve para procesar, modificar o validar la request/response en el camino
 // Middlewares para parsear body y servir estáticos, Cuando un cliente (ejemplo: un formulario en HTML o una app) envía datos al servidor, esos datos llegan en bruto (raw), El middleware de parsing convierte ese body en un objeto JavaScript
-app.use(express.urlencoded({ extended: true }));        // Para leer <form> application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));        // convierte datos de formularios en objetos JS
 app.use(express.json());                                // Para leer JSON en el body
 app.use(express.static(path.join(__dirname, 'public')));// Servir /public como estáticos (CSS, imágenes, etc.)
 

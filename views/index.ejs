@@ -8,16 +8,17 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
+    <!-- ==================== HEADER ==================== -->
     <header class="header">
       <div class="title">
         <span class="logo">🗂️</span>
         <h1>Topics</h1>
       </div>
+      <!-- Botón para crear un nuevo topic -->
       <a class="btn btn--primary" href="/topics/new">+ Nuevo</a>
     </header>
 
-    <!-- Mensaje vacío -->
+    <!-- ==================== MENSAJE SI NO HAY TOPICS ==================== -->
     <% if (!topics || topics.length === 0) { %>
       <div class="card card--empty">
         <h2 class="muted">Aún no hay topics</h2>
@@ -26,44 +27,78 @@
       </div>
     <% } else { %>
 
-      <!-- Tabla -->
+      <!-- ==================== TABLA DE TOPICS ==================== -->
       <div class="card">
         <div class="table-top">
+          <!-- Info de orden -->
           <div class="muted">Ordenado por votos (desc)</div>
+          <!-- Botón refrescar -->
           <a class="btn btn--neutral" href="/">↻ Actualizar</a>
         </div>
         <div class="table-wrap">
           <table class="table">
             <thead>
               <tr>
+                <!-- Distribución de anchos de columnas -->
                 <th style="width:28%">Título</th>
                 <th style="width:36%">Descripción</th>
                 <th style="width:10%">Votos</th>
-                <th style="width:16%">Creado</th>
-                <th style="width:10%" class="txt-right">Acciones</th>
+                <th style="width:12%">Creado</th>
+                <th style="width:14%" class="txt-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
               <% topics.forEach(t => { %>
                 <tr>
+                  <!-- ==================== COLUMNA: TÍTULO ==================== -->
                   <td class="title-cell">
                     <strong><%= t.title %></strong>
+                    <!-- Badge para marcar "Popular" si tiene 10 o más votos -->
                     <% if (t.votes >= 10) { %>
                       <span class="badge">Popular</span>
                     <% } %>
                   </td>
+
+                  <!-- ==================== COLUMNA: DESCRIPCIÓN ==================== -->
                   <td class="muted"><%= t.description || '—' %></td>
+
+                  <!-- ==================== COLUMNA: VOTOS ==================== -->
                   <td><span class="kpi"><%= t.votes %></span></td>
+
+                  <!-- ==================== COLUMNA: FECHA DE CREACIÓN ==================== -->
                   <td class="muted"><%= t.created_at %></td>
+
+                  <!-- ==================== COLUMNA: ACCIONES ==================== -->
                   <td class="txt-right">
                     <div class="actions">
+                      <!-- 🔗 Enlace externo (si existe un link en la DB) -->
+                      <% if (t.link && t.link.trim()) { %>
+                        <a
+                          class="btn btn--neutral"
+                          href="<%= t.link %>"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Abrir enlace externo"
+                        >🔗</a>
+                      <% } else { %>
+                        <!-- Botón deshabilitado si no hay link -->
+                        <button class="btn btn--neutral" disabled title="Sin enlace">🔗</button>
+                      <% } %>
+
+                      <!-- Botón: votar positivo -->
                       <form method="post" action="/topics/<%= t.id %>/vote?dir=up">
                         <button class="btn btn--icon" title="Votar positivo">👍</button>
                       </form>
+
+                      <!-- Botón: votar negativo -->
                       <form method="post" action="/topics/<%= t.id %>/vote?dir=down">
                         <button class="btn btn--icon" title="Votar negativo">👎</button>
                       </form>
+
+                      <!-- Botón: editar -->
                       <a class="btn btn--neutral" href="/topics/<%= t.id %>/edit" title="Editar">✏️</a>
+
+                      <!-- Botón: eliminar (con confirmación) -->
                       <form method="post" action="/topics/<%= t.id %>/delete" onsubmit="return confirm('¿Eliminar este topic?')">
                         <button class="btn btn--danger" title="Eliminar">🗑️</button>
                       </form>
@@ -77,6 +112,7 @@
       </div>
     <% } %>
 
+    <!-- ==================== FOOTER ==================== -->
     <footer class="footer">
       <span class="muted">CRUD Challenge • Express + EJS + SQLite</span>
     </footer>

@@ -27,17 +27,19 @@ export function showNewForm(req, res) {
 
 // Crear nuevo topic (POST /topics)
 export function createTopicHandler(req, res) {
-  const { title, description } = req.body;    // Tomamos campos del form
+  const { title, description, link } = req.body;    // Tomamos campos del form
   // trim: Elimina los espacios en blanco al inicio y al final de un string
   if (!title || title.trim() === '') {        // Validación mínima
     return res.status(400).send('El título es obligatorio');
   }
-  createTopic({ title: title.trim(), description: (description || '').trim() });
+  createTopic({ title: title.trim(), description: (description || '').trim(), link: (link || '').trim() });
+  console.log('BODY:', req.body);
   return res.redirect('/topics');             // Volvemos al listado
 }
 
 // Votar (POST /topics/:id/vote?dir=up|down)
 export function voteTopicHandler(req, res) {
+  // req.params → valores que vienen en la ruta (:id) | req.query → valores que vienen en el query string (?dir=up)
   const { id } = req.params;                  // id en la URL
   const { dir } = req.query;                  // ?dir=up|down
   const topic = getTopicById(Number(id));     // Verificamos que exista
@@ -65,13 +67,20 @@ export function showEditForm(req, res) {
 
 // POST '/topics/:id/update' - Guardar cambios
 export function updateTopicCtrl(req, res) {
-  const { id } = req.params;                // id de la URL
-  const { title, description } = req.body;  // campos del form
-  updateTopic(id, title, description || ''); // actualiza en DB
-  res.redirect('/');                        // vuelve al home
+  const { id } = req.params;                       // id de la URL
+  const { title, description, link } = req.body;   // campos del form
+
+  // trim para limpiar strings
+  const t = (title ?? '').trim();
+  const d = (description ?? '').trim();
+  const l = (link ?? '').trim();
+
+  updateTopic(Number(id), t, d, l);  // pasamos las constantes
+  res.redirect('/topics');           // volvemos al listado
+  console.log('BODY:', req.body);
 }
 
-// (Opcional) GET '/topics/:id' - Ver un topic puntual
+// GET '/topics/:id' - Ver un topic puntual
 export function showTopic(req, res) {
   const { id } = req.params;       // id en la URL
   const topic = getTopicById(id);  // busca
