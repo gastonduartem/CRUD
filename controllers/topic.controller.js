@@ -9,6 +9,8 @@ import {
   updateTopic
 } from '../models/topic.model.js';
 
+// RENDERIZAR: tomar una plantilla (por ejemplo index.ejs) + datos (del servidor) → y transformarlos en HTML final que el navegador pueda mostrar
+
 // Listar topics → renderiza views/index.ejs
 export function listTopics(req, res) {
   const topics = getAllTopics();               // Traemos todos
