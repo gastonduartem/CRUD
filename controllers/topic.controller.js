@@ -9,7 +9,7 @@ import {
   updateTopic
 } from '../models/topic.model.js';
 
-// RENDERIZAR: tomar una plantilla (por ejemplo index.ejs) + datos (del servidor) → y transformarlos en HTML final que el navegador pueda mostrar
+// RENDERIZAR: tomar una plantilla (por ejemplo index.ejs) + datos (del servidor) → y transformarlos en HTML final que el navegador pueda mostrar, res.render() → usa un motor de plantillas (EJS en tu caso) para generar HTML dinámico a partir de una vista
 
 // Listar topics → renderiza views/index.ejs
 export function listTopics(req, res) {

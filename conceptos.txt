@@ -1,0 +1,48 @@
+Node.js
+- Qué es: entorno para ejecutar JavaScript en el servidor (fuera del navegador).
+- Dónde se cumple: cuando ejecutas node app.js (o nodemon app.js) estás corriendo tu servidor en Node.
+- En tu código: todos los archivos .js (p. ej. app.js) se ejecutan con Node.
+
+Express
+- Qué es: framework HTTP minimalista para crear APIs/servidores web.
+- Dónde se cumple: en app.js se crea la app, se configuran middlewares y se definen rutas.
+
+HTTP
+- Qué es: protocolo de comunicación entre cliente (navegador) y servidor.
+- Dónde se cumple: cada vez que haces GET (leer topics), POST (crear), etc. desde tu app al servidor.
+
+Rutas (Routing)
+- Qué es: asociar una URL + método HTTP a un controlador.
+- Dónde se cumple: en routes/topic.routes.js defines GET, POST, etc. para /topics.
+
+Controladores (Controllers)
+- Qué es: funciones que reciben la petición, coordinan lógica y responden.
+- Dónde se cumple: en controllers/topic.controller.js (listTopics, createTopic, voteTopic, etc.).
+
+Modelos (Models) y capa de datos
+- Qué es: acceso a la base de datos y operaciones CRUD.
+- Dónde se cumple: en models/topic.model.js usando better-sqlite3 (getAllTopics, createTopic, updateTopic, deleteTopic).
+
+Vistas (EJS)
+- Qué es: motor de plantillas que mezcla HTML con variables.
+- Dónde se cumple: en la carpeta views/ (index.ejs, new.ejs, edit.ejs).
+
+Middleware
+- Qué es: funciones que se ejecutan antes de tu manejador de ruta. Sirven para procesar, modificar o validar la request/response.
+- Dónde se cumple: app.use(express.urlencoded()), app.use(express.json()), app.use(express.static('public')).
+
+CRUD
+- Qué es: Create, Read, Update, Delete (operaciones básicas sobre datos).
+- Dónde se cumple:
+  - Create: POST /topics
+  - Read: GET /
+  - Update: POST /topics/:id/update
+  - Delete: POST /topics/:id/delete
+
+Sistema de votaciones
+- Qué es: mecanismo para que los usuarios voten y los resultados se reflejen en la interfaz.
+- Dónde se cumple: POST /topics/:id/vote (up o down), que actualiza en DB y reordena la lista.
+
+Scripts y Nodemon
+- Qué es: automatizar comandos y recargar en caliente.
+- Dónde se cumple: en package.json con "dev": "nodemon app.js".
