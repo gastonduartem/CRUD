@@ -2,14 +2,15 @@
 // Importamos la conexión a la DB
 import db from '../db/index.js';
 
-// (2) Preparamos los statements (mejor performance y seguridad)
+// Preparamos los statements (mejor performance y seguridad)
 // crea una sentencia preparada (prepared statement), Una sentencia preparada es como “guardar” una consulta SQL lista para ejecutar varias veces sin volver a compilarla
-const stmtAll     = db.prepare(`SELECT * FROM topics ORDER BY id DESC`);
+const stmtAll     = db.prepare(`SELECT * FROM topics ORDER BY votes DESC, datetime(created_at) DESC, id DESC`);
 const stmtById    = db.prepare(`SELECT * FROM topics WHERE id = ?`);
 const stmtInsert  = db.prepare(`INSERT INTO topics (title, description) VALUES (?, ?)`);
 const stmtVoteUp  = db.prepare(`UPDATE topics SET votes = votes + 1 WHERE id = ?`);
 const stmtVoteDown= db.prepare(`UPDATE topics SET votes = MAX(votes - 1, 0) WHERE id = ?`); // evita negativos
 const stmtDelete  = db.prepare(`DELETE FROM topics WHERE id = ?`);
+const stmtUpdate = db.prepare(`UPDATE topics SET title = ?, description = ? WHERE id = ?`); // Actualiza título y descripción por id
 
 // Función: obtener todos
 export function getAllTopics() {
@@ -45,4 +46,9 @@ export function voteTopic(id, dir = 'up') {
 export function deleteTopic(id) {
   const info = stmtDelete.run(id);
   return info.changes > 0; // true si eliminó algo
+}
+
+// Función: actualizar un topic existente
+export function updateTopic(id, title, description) {
+  stmtUpdate.run(title, description, id); // Guarda cambios
 }

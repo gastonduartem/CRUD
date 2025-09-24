@@ -1,73 +1,85 @@
-<!-- views/index.ejs -->
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <!-- Meta y título -->
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><%= title %></title>
-
-  <!-- CSS básico de ejemplo (puedes mover a /public/css/styles.css) -->
-  <style>
-    body { font-family: system-ui, Arial, sans-serif; margin: 2rem; }
-    header { display: flex; justify-content: space-between; align-items: center; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { padding: .6rem; border-bottom: 1px solid #ddd; text-align: left; }
-    .actions { display: flex; gap: .5rem; }
-    .btn { padding: .35rem .6rem; border: 1px solid #ccc; background: #f6f6f6; cursor: pointer; }
-    .btn--danger { border-color: #d33; color: #d33; }
-  </style>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <!-- Cabecera con botón "Nuevo" -->
-  <header>
-    <h1>Topics</h1>
-    <a class="btn" href="/topics/new">+ Nuevo</a>
-  </header>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="title">
+        <span class="logo">🗂️</span>
+        <h1>Topics</h1>
+      </div>
+      <a class="btn btn--primary" href="/topics/new">+ Nuevo</a>
+    </header>
 
-  <!-- Tabla de topics -->
-  <table>
-    <thead>
-      <tr>
-        <th>Título</th>
-        <th>Descripción</th>
-        <th>Votos</th>
-        <th>Creado</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
+    <!-- Mensaje vacío -->
     <% if (!topics || topics.length === 0) { %>
-      <!-- Sin datos -->
-      <tr><td colspan="5">No hay topics aún</td></tr>
+      <div class="card card--empty">
+        <h2 class="muted">Aún no hay topics</h2>
+        <p>Crea tu primer topic para empezar a votar y ordenar.</p>
+        <a class="btn btn--primary" href="/topics/new">Crear topic</a>
+      </div>
     <% } else { %>
-      <!-- Render de cada fila -->
-      <% topics.forEach(t => { %>
-        <tr>
-          <td><%= t.title %></td>
-          <td><%= t.description %></td>
-          <td><%= t.votes %></td>
-          <td><%= t.created_at %></td>
-          <td class="actions">
-            <!-- Votar arriba -->
-            <form method="post" action="/topics/<%= t.id %>/vote?dir=up">
-              <button class="btn" type="submit">👍</button>
-            </form>
-            <!-- Votar abajo -->
-            <form method="post" action="/topics/<%= t.id %>/vote?dir=down">
-              <button class="btn" type="submit">👎</button>
-            </form>
-            <!-- Eliminar -->
-            <form method="post" action="/topics/<%= t.id %>/delete" onsubmit="return confirm('Eliminar?')">
-              <button class="btn btn--danger" type="submit">Eliminar</button>
-            </form>
-          </td>
-        </tr>
-      <% }) %>
-    <% } %>
-    </tbody>
-  </table>
 
-  <!-- Link volver (no esencial porque ya estamos en /topics) -->
-  <p><a href="/">← Volver al inicio</a></p>
+      <!-- Tabla -->
+      <div class="card">
+        <div class="table-top">
+          <div class="muted">Ordenado por votos (desc)</div>
+          <a class="btn btn--neutral" href="/">↻ Actualizar</a>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:28%">Título</th>
+                <th style="width:36%">Descripción</th>
+                <th style="width:10%">Votos</th>
+                <th style="width:16%">Creado</th>
+                <th style="width:10%" class="txt-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% topics.forEach(t => { %>
+                <tr>
+                  <td class="title-cell">
+                    <strong><%= t.title %></strong>
+                    <% if (t.votes >= 10) { %>
+                      <span class="badge">Popular</span>
+                    <% } %>
+                  </td>
+                  <td class="muted"><%= t.description || '—' %></td>
+                  <td><span class="kpi"><%= t.votes %></span></td>
+                  <td class="muted"><%= t.created_at %></td>
+                  <td class="txt-right">
+                    <div class="actions">
+                      <form method="post" action="/topics/<%= t.id %>/vote?dir=up">
+                        <button class="btn btn--icon" title="Votar positivo">👍</button>
+                      </form>
+                      <form method="post" action="/topics/<%= t.id %>/vote?dir=down">
+                        <button class="btn btn--icon" title="Votar negativo">👎</button>
+                      </form>
+                      <a class="btn btn--neutral" href="/topics/<%= t.id %>/edit" title="Editar">✏️</a>
+                      <form method="post" action="/topics/<%= t.id %>/delete" onsubmit="return confirm('¿Eliminar este topic?')">
+                        <button class="btn btn--danger" title="Eliminar">🗑️</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } %>
+
+    <footer class="footer">
+      <span class="muted">CRUD Challenge • Express + EJS + SQLite</span>
+    </footer>
+  </div>
 </body>
 </html>

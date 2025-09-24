@@ -5,7 +5,8 @@ import {
   createTopic,
   voteTopic,
   deleteTopic,
-  getTopicById
+  getTopicById,
+  updateTopic
 } from '../models/topic.model.js';
 
 // Listar topics → renderiza views/index.ejs
@@ -51,4 +52,30 @@ export function deleteTopicHandler(req, res) {
   const ok = deleteTopic(Number(id));
   if (!ok) return res.status(404).send('Topic no encontrado');
   return res.redirect('/topics');
+}
+
+// GET '/topics/:id/edit' - Form de edición
+export function showEditForm(req, res) {
+  const { id } = req.params;        // toma id de la URL
+  const topic = getTopicById(id);   // busca en DB
+  if (!topic) return res.status(404).send('Topic no encontrado'); // 404 si no existe
+  // Renderiza la vista 'topics/edit' con el topic cargado
+  res.render('topics/edit', { title: 'Editar topic', topic });
+}
+
+// POST '/topics/:id/update' - Guardar cambios
+export function updateTopicCtrl(req, res) {
+  const { id } = req.params;                // id de la URL
+  const { title, description } = req.body;  // campos del form
+  updateTopic(id, title, description || ''); // actualiza en DB
+  res.redirect('/');                        // vuelve al home
+}
+
+// (Opcional) GET '/topics/:id' - Ver un topic puntual
+export function showTopic(req, res) {
+  const { id } = req.params;       // id en la URL
+  const topic = getTopicById(id);  // busca
+  if (!topic) return res.status(404).send('Topic no encontrado'); // 404 si no está
+  // Podés crear una vista 'topics/show.ejs' si querés algo más lindo
+  res.send(topic); // simple por ahora (JSON)
 }
